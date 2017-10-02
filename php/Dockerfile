@@ -6,6 +6,7 @@ FROM ${IMAGE_NAME}:${PHP_VERSION}-${PHP_VARIANT}
 ARG MEMCACHED_VERSION
 ARG REDIS_VERSION
 ARG APCUBC_VERSION
+ARG PHP_VARIANT
 
 RUN env \
     && printf "\
@@ -89,9 +90,9 @@ RUN env \
     && mkdir -p /home/php/app /home/php/bin \
     && chown php:php /home/php/app /home/php/bin \
     && if [ "apache" = "$PHP_VARIANT" ] ; then \
-        rm -rf /var/www/html \
-        && ln -sf /home/php/app/web /var/www/html \
-        && a2enmode rewrite; \
+        a2enmod rewrite \
+        && rm -rf /var/www/html \
+        && ln -sf /home/php/app/web /var/www/html; \
     fi
 
 USER php
