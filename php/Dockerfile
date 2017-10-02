@@ -88,7 +88,8 @@ RUN env \
     && chown php:php /home/php/app /home/php/bin \
     && if [ "apache" = "$PHP_VARIANT" ] ; then \
         rm -rf /var/www/html \
-        && ln -sf /home/php/app/web /var/www/html; \
+        && ln -sf /home/php/app/web /var/www/html \
+        && a2enmode rewrite; \
     fi
 
 USER php
