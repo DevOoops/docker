@@ -1,0 +1,39 @@
+language: c
+dist: trusty
+sudo: required
+env:
+    global:
+        - DOCKER_VERSION=17.06.2~ce-0~ubuntu
+        - DOCKER_EXPERIMENTAL=true
+        - MAKEFLAGS="--jobs=2 --max-load=4"
+    matrix:
+        - IMAGE_NAME=php PHP_VERSION=7.1.10 PHP_VARIANT=apache
+before_install:
+    - >
+        if [ ! -z "${DOCKER_EXPERIMENTAL}" ] ; then
+            echo '{"experimental":true}' | sudo tee /etc/docker/daemon.json
+        fi
+
+        if [ "$(docker version -f '{{.Server.Version}}')|sed -e 's/-ce.*$//'" !=
+        "$(echo ${DOCKER_VERSION}|sed -e 's/~ce.*$//')" ] ; then
+            apt-cache madison docker-ce
+            sudo apt-get -o Dpkg::Options::="--force-confnew" install -y docker-ce=${DOCKER_VERSION}
+        else
+            sudo service docker restart
+        fi
+install:
+    - 'make -C ${IMAGE_NAME} pull'
+script:
+    - 'make -C ${IMAGE_NAME} build'
+    - 'make -C ${IMAGE_NAME} test'
+after_success:
+    - 'make -C ${IMAGE_NAME} tag'
+    - docker image ls
+deploy:
+    provider: script
+    script: >-
+        docker login --username="${DOCKER_HUB_USERNAME}"
+        --password="${DOCKER_HUB_PASSWORD}" && make -C ${IMAGE_NAME} push
+    skip_cleanup: true
+    'on':
+        branch: master
