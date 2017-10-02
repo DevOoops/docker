@@ -99,7 +99,7 @@ ARG COMPOSER_VERSION
 RUN if [ -z "$COMPOSER_VERSION" ] ; then \
         echo "Don't installing composer"; \
     else \
-        wget -O - https://getcomposer.org/installer | php -- --install-dir=/home/php/bin --filename=composer --version=${COMPOSER_VERSION} \
+        curl -sL https://getcomposer.org/installer | php -- --install-dir=/home/php/bin --filename=composer --version=${COMPOSER_VERSION} \
         && chown php:php /home/php/bin/composer; \
     fi
 
