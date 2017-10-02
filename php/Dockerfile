@@ -19,7 +19,7 @@ RUN env \
     " > /usr/local/etc/php/php.ini \
     && docker-php-source extract \
     && apt-get update \
-    && apt-get install -y jq curl git-core \
+    && apt-get install -y curl git-core \
     && apt-get install -y \
         zlib1g-dev \
         libicu-dev \
