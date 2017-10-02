@@ -20,6 +20,7 @@ RUN env \
     && apt-get update \
     && apt-get install -y jq curl git-core \
     && apt-get install -y \
+        zlib1g-dev \
         libicu-dev \
         libpq-dev \
         libxml2-dev \
@@ -33,6 +34,7 @@ RUN env \
     opcache.fast_shutdown=1\n\
     " >> /usr/local/etc/php/conf.d/00-opcache.ini \
     && docker-php-ext-install \
+        zip \
         intl \
         bcmath \
         mcrypt \
@@ -56,7 +58,7 @@ RUN env \
         apt-get install -y libmemcached-dev \
         && pecl install memcached-${MEMCACHED_VERSION} \
         && docker-php-ext-enable --ini-name 100-memcached.ini memcached \
-        && apt-get remove -y libmemcached-dev \
+        && apt-get remove -y libmemcached-dev zlib1g-dev \
         && apt-get install -y libmemcached11 libmemcachedutil2; \
     fi \
     && if [ -z "$REDIS_VERSION" ] ; then \
