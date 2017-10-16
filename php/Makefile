@@ -1,5 +1,5 @@
 TAG=$(PHP_VERSION)-$(PHP_VARIANT)
-TAGS_TO_PULL=$(TAG)
+TAGS_TO_PULL=$(TAG) $(TAG)-nodejs
 include ../Makefile
 
 APCUBC_VERSION?=1.0.3
@@ -10,17 +10,31 @@ PRESTISSIMO_VERSION?=0.3.7
 
 build:
 	@docker build --rm \
-	--cache-from $(DOCKER_IMAGE_NAME):$(TAG) \
-	--build-arg IMAGE_NAME=$(IMAGE_NAME) \
-	--build-arg PHP_VERSION=$(PHP_VERSION) \
-	--build-arg PHP_VARIANT=$(PHP_VARIANT) \
-	--build-arg APCUBC_VERSION=$(APCUBC_VERSION) \
-	--build-arg MEMCACHED_VERSION=$(MEMCACHED_VERSION) \
-	--build-arg REDIS_VERSION=$(REDIS_VERSION) \
-	--build-arg COMPOSER_VERSION=$(COMPOSER_VERSION) \
-	--build-arg PRESTISSIMO_VERSION=$(PRESTISSIMO_VERSION) \
-	-t $(DOCKER_IMAGE_NAME):$(TAG) .
+		--cache-from $(DOCKER_IMAGE_NAME):$(TAG) \
+		--build-arg IMAGE_NAME=$(IMAGE_NAME) \
+		--build-arg PHP_VERSION=$(PHP_VERSION) \
+		--build-arg PHP_VARIANT=$(PHP_VARIANT) \
+		--build-arg APCUBC_VERSION=$(APCUBC_VERSION) \
+		--build-arg MEMCACHED_VERSION=$(MEMCACHED_VERSION) \
+		--build-arg REDIS_VERSION=$(REDIS_VERSION) \
+		--build-arg COMPOSER_VERSION=$(COMPOSER_VERSION) \
+		--build-arg PRESTISSIMO_VERSION=$(PRESTISSIMO_VERSION) \
+		--target base \
+		-t $(DOCKER_IMAGE_NAME):$(TAG) .
+	@docker build --rm \
+		--cache-from $(DOCKER_IMAGE_NAME):$(TAG) \
+		--build-arg IMAGE_NAME=$(IMAGE_NAME) \
+		--build-arg PHP_VERSION=$(PHP_VERSION) \
+		--build-arg PHP_VARIANT=$(PHP_VARIANT) \
+		--build-arg APCUBC_VERSION=$(APCUBC_VERSION) \
+		--build-arg MEMCACHED_VERSION=$(MEMCACHED_VERSION) \
+		--build-arg REDIS_VERSION=$(REDIS_VERSION) \
+		--build-arg COMPOSER_VERSION=$(COMPOSER_VERSION) \
+		--build-arg PRESTISSIMO_VERSION=$(PRESTISSIMO_VERSION) \
+		--target nodejs \
+		-t $(DOCKER_IMAGE_NAME):$(TAG)-nodejs .
 
 test:
 	docker run --rm $(DOCKER_IMAGE_NAME):$(TAG) php --version
 	docker run --rm $(DOCKER_IMAGE_NAME):$(TAG) php -m
+	docker run --rm $(DOCKER_IMAGE_NAME):$(TAG)-nodejs nodejs --version
