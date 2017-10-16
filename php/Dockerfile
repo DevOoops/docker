@@ -42,7 +42,7 @@ RUN env \
         mcrypt \
         pgsql \
         pdo_pgsql \
-    && apt-get remove -y \
+    && apt-get remove --purge -y \
         libicu-dev \
         icu-devtools \
         libpq-dev \
@@ -60,7 +60,7 @@ RUN env \
         apt-get install -y libmemcached-dev \
         && pecl install memcached-${MEMCACHED_VERSION} \
         && docker-php-ext-enable --ini-name 100-memcached.ini memcached \
-        && apt-get remove -y libmemcached-dev zlib1g-dev \
+        && apt-get remove --purge -y libmemcached-dev zlib1g-dev \
         && apt-get install -y libmemcached11 libmemcachedutil2; \
     fi \
     && if [ -z "$REDIS_VERSION" ] ; then \
@@ -79,8 +79,10 @@ RUN env \
         " > $PHP_INI_DIR/conf.d/100-apc.ini; \
     fi \
     && docker-php-source delete \
-    && apt-get remove -y libx11-6 $PHPIZE_DEPS \
+    && apt-get remove --purge -y libx11-6 $PHPIZE_DEPS \
     && apt-get -y autoremove \
+    && apt-get autoremove -y \
+    && apt-get autoclean -y \
     && apt-get clean -y \
     && rm -rf \
         /tmp/* \
