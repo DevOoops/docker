@@ -1,7 +1,7 @@
 ARG IMAGE_NAME
 ARG PHP_VERSION
 ARG PHP_VARIANT
-FROM ${IMAGE_NAME}:${PHP_VERSION}-${PHP_VARIANT}
+FROM ${IMAGE_NAME}:${PHP_VERSION}-${PHP_VARIANT} as base
 
 ARG MEMCACHED_VERSION
 ARG REDIS_VERSION
@@ -118,3 +118,15 @@ RUN if [ -z "$PRESTISSIMO_VERSION" ] || [ "$PRESTISSIMO_VERSION$COMPOSER_VERSION
     fi
 
 WORKDIR /home/php/app
+
+FROM base as nodejs
+
+USER root
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+    && apt-get install -y nodejs \
+    && apt-get -y autoremove \
+    && apt-get autoremove -y \
+    && apt-get autoclean -y \
+    && apt-get clean -y \
+    && rm -rf /tmp/*
+USER php
