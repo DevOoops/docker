@@ -92,10 +92,14 @@ RUN env \
     && useradd -k /dev/null -m -u 1000 -U php \
     && mkdir -p /home/php/app /home/php/bin \
     && chown php:php /home/php/app /home/php/bin \
+    && echo "display_errors=Off" >> /usr/local/etc/php/php.ini \
     && if [ "apache" = "$PHP_VARIANT" ] ; then \
         a2enmod rewrite \
         && rm -rf /var/www/html \
-        && ln -sf /home/php/app/web /var/www/html; \
+        && mkdir -p /home/php/web \
+        && ln -sf /home/php/web /var/www/html \
+        && chown php:php /home/php/web \
+        && sed -i -e 's/^ServerSignature.*/ServerSignature Off/' -e 's/^ServerTokens.*/ServerTokens Prod/' /etc/apache2/conf-enabled/security.conf; \
     fi
 
 USER php
