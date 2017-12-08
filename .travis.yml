@@ -7,7 +7,7 @@ env:
         - DOCKER_EXPERIMENTAL=true
         - MAKEFLAGS="--jobs=2 --max-load=4"
     matrix:
-        - IMAGE_NAME=php PHP_VERSION=7.1.10 PHP_VARIANT=apache
+        - IMAGE_NAME=php PHP_VERSION=7.1.12 PHP_VARIANT=apache
 before_install:
     - >
         if [ ! -z "${DOCKER_EXPERIMENTAL}" ] ; then

@@ -92,7 +92,7 @@ RUN env \
     && useradd -k /dev/null -m -u 1000 -U php \
     && mkdir -p /home/php/app /home/php/bin \
     && chown php:php /home/php/app /home/php/bin \
-    && echo "display_errors=Off" >> /usr/local/etc/php/php.ini \
+    && printf "display_errors=Off\nlog_errors=On\n" >> /usr/local/etc/php/php.ini \
     && if [ "apache" = "$PHP_VARIANT" ] ; then \
         a2enmod rewrite \
         && rm -rf /var/www/html \
