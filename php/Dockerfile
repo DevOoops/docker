@@ -96,6 +96,8 @@ RUN env \
     && if [ "apache" = "$PHP_VARIANT" ] ; then \
         a2enmod rewrite \
         && rm -rf /var/www/html \
+        && mkdir -p /home/php/app/web \
+        && chown php:php /home/php/app/web \
         && ln -sf /home/php/app/web/ /var/www/html \
         && sed -i -e 's/^ServerSignature.*/ServerSignature Off/' -e 's/^ServerTokens.*/ServerTokens Prod/' /etc/apache2/conf-enabled/security.conf; \
     fi
