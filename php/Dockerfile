@@ -134,3 +134,38 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
     && apt-get clean -y \
     && rm -rf /tmp/*
 USER php
+
+FROM base as newrelic
+
+USER root
+
+# Install New Relic
+RUN set -x && DEBIAN_FRONTEND=noninteractive \
+  && curl -L https://download.newrelic.com/548C16BF.gpg | apt-key add - \
+  && echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list \
+  && apt-get update \
+  && apt-get install -y newrelic-php5 \
+  && newrelic-install install \
+  && apt-get -y autoremove \
+  && apt-get autoremove -y \
+  && apt-get autoclean -y \
+  && apt-get clean -y \
+  && rm -rf /tmp/*
+
+COPY entrypoint.sh /
+
+CMD ["/entrypoint.sh"]
+
+USER php
+
+FROM newrelic as nodejs-newrelic
+
+USER root
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+    && apt-get install -y nodejs \
+    && apt-get -y autoremove \
+    && apt-get autoremove -y \
+    && apt-get autoclean -y \
+    && apt-get clean -y \
+    && rm -rf /tmp/*
+USER php

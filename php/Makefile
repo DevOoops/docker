@@ -1,5 +1,5 @@
 TAG=$(PHP_VERSION)-$(PHP_VARIANT)
-TAGS_TO_PULL=$(TAG) $(TAG)-nodejs
+TAGS_TO_PULL=$(TAG) $(TAG)-nodejs $(TAG)-newrelic $(TAG)-nodejs-newrelic
 include ../Makefile
 
 APCUBC_VERSION?=1.0.3
@@ -33,6 +33,30 @@ build:
 		--build-arg PRESTISSIMO_VERSION=$(PRESTISSIMO_VERSION) \
 		--target nodejs \
 		-t $(DOCKER_IMAGE_NAME):$(TAG)-nodejs .
+	@docker build --rm \
+		--cache-from $(DOCKER_IMAGE_NAME):$(TAG) \
+		--build-arg IMAGE_NAME=$(IMAGE_NAME) \
+		--build-arg PHP_VERSION=$(PHP_VERSION) \
+		--build-arg PHP_VARIANT=$(PHP_VARIANT) \
+		--build-arg APCUBC_VERSION=$(APCUBC_VERSION) \
+		--build-arg MEMCACHED_VERSION=$(MEMCACHED_VERSION) \
+		--build-arg REDIS_VERSION=$(REDIS_VERSION) \
+		--build-arg COMPOSER_VERSION=$(COMPOSER_VERSION) \
+		--build-arg PRESTISSIMO_VERSION=$(PRESTISSIMO_VERSION) \
+		--target newrelic \
+		-t $(DOCKER_IMAGE_NAME):$(TAG)-newrelic .
+	@docker build --rm \
+		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-newrelic \
+		--build-arg IMAGE_NAME=$(IMAGE_NAME) \
+		--build-arg PHP_VERSION=$(PHP_VERSION) \
+		--build-arg PHP_VARIANT=$(PHP_VARIANT) \
+		--build-arg APCUBC_VERSION=$(APCUBC_VERSION) \
+		--build-arg MEMCACHED_VERSION=$(MEMCACHED_VERSION) \
+		--build-arg REDIS_VERSION=$(REDIS_VERSION) \
+		--build-arg COMPOSER_VERSION=$(COMPOSER_VERSION) \
+		--build-arg PRESTISSIMO_VERSION=$(PRESTISSIMO_VERSION) \
+		--target nodejs-newrelic \
+		-t $(DOCKER_IMAGE_NAME):$(TAG)-nodejs-newrelic .
 
 test:
 	docker run --rm $(DOCKER_IMAGE_NAME):$(TAG) php --version
