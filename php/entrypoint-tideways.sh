@@ -4,6 +4,8 @@
 # if secret is set
 if [ -f /run/secrets/tideways_api_key ]; then
     TIDEWAYS_API_KEY=$(cat /run/secrets/tideways_api_key)
+
+    echo "Tideways secret found"
 fi
 
 # if env or secret is set
@@ -13,14 +15,19 @@ if [ ! -z "$TIDEWAYS_API_KEY" ]; then
     if [ "$TIDEWAYS_ENV" = "prod" ]; then
         TIDEWAYS_ENV="production"
     fi
-
+    echo "Tideways ENV $TIDEWAYS_ENV"
+    
     # try to get rancher container name
     TIDEWAYS_HOST=${TIDEWAY_HOST:-$(curl -s rancher-metadata/latest/self/container/name)}
     if [ "$TIDEWAY_HOST" = "" ]; then
         TIDEWAYS_HOST=$(cat /etc/hostname)
     fi
 
+    echo "Tideways HOST $TIDEWAYS_HOST"
+
     TIDEWAYS_APP_NAME=${TIDEWAYS_APP_NAME:-$(curl -s rancher-metadata/latest/self/stack/name)}
+
+    echo "Tideways APP_NAME $TIDEWAYS_APP_NAME"
 
     # Configure tideway daemon with env vars
     printf "\
@@ -39,6 +46,7 @@ if [ ! -z "$TIDEWAYS_API_KEY" ]; then
 
     # start daemon
     /etc/init.d/tideways-daemon start
+    
 fi
-
-/entrypoint.sh
+echo "continue to basic entrypoint with args $@"
+exec /entrypoint.sh $@

@@ -125,7 +125,7 @@ WORKDIR /home/php/app
 
 COPY entrypoint.sh /
 
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 
 FROM base as nodejs
 
@@ -138,7 +138,6 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
     && apt-get clean -y \
     && rm -rf /tmp/*
 USER php
-
 
 FROM base as tideways
 
@@ -156,7 +155,7 @@ USER php
 
 COPY entrypoint-tideways.sh /
 
-CMD ["/entrypoint-tideways.sh"]
+ENTRYPOINT ["/entrypoint-tideways.sh"]
 
 FROM nodejs as nodejs-tideways
 
@@ -174,4 +173,4 @@ USER php
 
 COPY entrypoint-tideways.sh /
 
-CMD ["/entrypoint-tideways.sh"]
+ENTRYPOINT ["/entrypoint-tideways.sh"]
