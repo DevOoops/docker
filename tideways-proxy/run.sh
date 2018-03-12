@@ -6,5 +6,10 @@ if [ "$TIDEWAY_HOST" = "" ]; then
     TIDEWAY_HOST=$(cat /etc/hostname)
 fi
 
-echo "starting tideways proxy with host $TIDEWAY_HOST"
-/usr/bin/tideways-proxy --listen=0.0.0.0:8137 --hostname=$TIDEWAY_HOST
+TIDEWAYS_ENV="${TIDEWAYS_ENV:-$XEONYS_PLATFORM_ENV}"
+if [ "$TIDEWAYS_ENV" = "prod" ]; then
+    TIDEWAYS_ENV="production"
+fi
+
+echo "starting tideways proxy with host $TIDEWAY_HOST env=$TIDEWAYS_ENV"
+/usr/bin/tideways-proxy --listen=0.0.0.0:8137 --hostname=$TIDEWAY_HOST --env=$TIDEWAYS_ENV
