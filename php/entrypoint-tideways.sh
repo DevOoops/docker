@@ -11,15 +11,24 @@ fi
 # if env or secret is set
 if [ ! -z "$TIDEWAYS_API_KEY" ]; then
 
+    if [ ! -z "$WAIT_RANCHER_METADATA" ]; then
+      echo "Wait for Rancher Metadata"
+      while [ "$(curl -s rancher-metadata/latest/self/container/name)" = "" ]; do \
+	      printf "."; \
+	      sleep 2; \
+      done;
+      echo "[OK]"
+    fi
+
     TIDEWAYS_ENV="${XEONYS_PLATFORM_ENV}"
     if [ "$TIDEWAYS_ENV" = "prod" ]; then
         TIDEWAYS_ENV="production"
     fi
     echo "Tideways ENV $TIDEWAYS_ENV"
-    
+
     # try to get rancher container name
     TIDEWAYS_HOST=${TIDEWAY_HOST:-$(curl -s rancher-metadata/latest/self/container/name)}
-    if [ "$TIDEWAY_HOST" = "" ]; then
+    if [ "$TIDEWAYS_HOST" = "" ]; then
         TIDEWAYS_HOST=$(cat /etc/hostname)
     fi
 
@@ -29,11 +38,14 @@ if [ ! -z "$TIDEWAYS_API_KEY" ]; then
 
     echo "Tideways APP_NAME $TIDEWAYS_APP_NAME"
 
+    # Default value
+    TIDEWAYS_PROXY=${TIDEWAYS_PROXY:-"https://tideways:8137"}
+
     # Configure tideway daemon with env vars
     printf "\
     TIDEWAYS_DAEMON_EXTRA=\"--hostname=${TIDEWAYS_HOST} --env=${TIDEWAYS_ENV} --server=${TIDEWAYS_PROXY} --insecure\" \n\
     " > /etc/default/tideways-daemon
-    
+
     # Configure tideway agent with env vars
     printf "\
     extension=tideways.so \n\
@@ -46,7 +58,7 @@ if [ ! -z "$TIDEWAYS_API_KEY" ]; then
 
     # start daemon
     /etc/init.d/tideways-daemon start
-    
+
 fi
 echo "continue to basic entrypoint with args $@"
 exec /entrypoint.sh $@
