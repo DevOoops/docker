@@ -100,6 +100,21 @@ RUN env \
         && chown php:php /home/php/app/web \
         && ln -sf /home/php/app/web/ /var/www/html \
         && sed -i -e 's/^ServerSignature.*/ServerSignature Off/' -e 's/^ServerTokens.*/ServerTokens Prod/' /etc/apache2/conf-enabled/security.conf; \
+        && touch /etc/apache2/conf-enabled/headers.conf \
+        && printf "\
+<IfModule mod_headers.c>\n\
+\t<Directory />\n\
+\t\tHeader always set X-XSS-Protection \"1; mode=block\"\n\
+\t\tHeader always set x-Frame-Options \"SAMEORIGIN\"\n\
+\t\tHeader always set X-Content-Type-Options \"nosniff\"\n\
+\t\tHeader always set Pragma \"no-cache\"\n\
+\t\tHeader always set Cache-Control \"no-store\"\n\
+\t\tHeader always set Strict-Transport-Security \"max-age=31536000; includeSubDomains\"\n\
+\t\tHeader always set Content-Security-Policy \"default-src 'self'; font-src *;img-src * data:; script-src *; style-src *;\"\n\
+\t\tHeader always set Referrer-Policy \"strict-origin\"\n\
+\t</Directory>\n\
+</IfModule>\n\
+" > /etc/apache2/conf-enabled/headers.conf \
     fi
 
 USER php
