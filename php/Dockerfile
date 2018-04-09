@@ -99,7 +99,7 @@ RUN env \
         && mkdir -p /home/php/app/web \
         && chown php:php /home/php/app/web \
         && ln -sf /home/php/app/web/ /var/www/html \
-        && sed -i -e 's/^ServerSignature.*/ServerSignature Off/' -e 's/^ServerTokens.*/ServerTokens Prod/' /etc/apache2/conf-enabled/security.conf; \
+        && sed -i -e 's/^ServerSignature.*/ServerSignature Off/' -e 's/^ServerTokens.*/ServerTokens Prod/' /etc/apache2/conf-enabled/security.conf \
         && touch /etc/apache2/conf-enabled/headers.conf \
         && printf "\
 <IfModule mod_headers.c>\n\
@@ -114,7 +114,7 @@ RUN env \
 \t\tHeader always set Referrer-Policy \"strict-origin\"\n\
 \t</Directory>\n\
 </IfModule>\n\
-" > /etc/apache2/conf-enabled/headers.conf \
+" > /etc/apache2/conf-enabled/headers.conf; \
     fi
 
 USER php
@@ -123,7 +123,7 @@ ENV PATH="$PATH:/home/php/bin" \
 
 ARG COMPOSER_VERSION
 RUN if [ -z "$COMPOSER_VERSION" ] ; then \
-        echo "Don't installing composer"; \
+        echo "Not installing composer"; \
     else \
         curl -sL https://getcomposer.org/installer | php -- --install-dir=/home/php/bin --filename=composer --version=${COMPOSER_VERSION} \
         && chown php:php /home/php/bin/composer; \
@@ -131,7 +131,7 @@ RUN if [ -z "$COMPOSER_VERSION" ] ; then \
 
 ARG PRESTISSIMO_VERSION
 RUN if [ -z "$PRESTISSIMO_VERSION" ] || [ "$PRESTISSIMO_VERSION$COMPOSER_VERSION" == "$PRESTISSIMO_VERSION" ] ; then \
-        echo "Don't installing prestissimo"; \
+        echo "Not installing prestissimo"; \
     else \
         composer global require hirak/prestissimo:$PRESTISSIMO_VERSION && composer global clear-cache -vvv; \
     fi
