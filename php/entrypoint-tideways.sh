@@ -11,7 +11,17 @@ fi
 # if env or secret is set
 if [ ! -z "$TIDEWAYS_API_KEY" ]; then
 
+    if [ ! -z "$WAIT_RANCHER_METADATA" ]; then
+      echo "Wait for Rancher Metadata"
+      while [ "$(curl -s rancher-metadata/latest/self/container/name)" = "" ]; do \
+	      printf "."; \
+	      sleep 2; \
+      done;
+      echo "[OK]"
+    fi
+
     TIDEWAYS_ENV="${TIDEWAYS_ENV:-${XEONYS_PLATFORM_ENV}}"
+
     if [ "$TIDEWAYS_ENV" = "prod" ]; then
         TIDEWAYS_ENV="production"
     fi
@@ -28,6 +38,9 @@ if [ ! -z "$TIDEWAYS_API_KEY" ]; then
     TIDEWAYS_APP_NAME=${TIDEWAYS_APP_NAME:-$(curl -s rancher-metadata/latest/self/stack/name)}
 
     echo "Tideways APP_NAME $TIDEWAYS_APP_NAME"
+
+    # Default value
+    TIDEWAYS_PROXY=${TIDEWAYS_PROXY:-"https://tideways:8137"}
 
     # Configure tideway daemon with env vars
     printf "\
