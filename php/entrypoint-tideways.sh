@@ -20,7 +20,8 @@ if [ ! -z "$TIDEWAYS_API_KEY" ]; then
       echo "[OK]"
     fi
 
-    TIDEWAYS_ENV="${XEONYS_PLATFORM_ENV}"
+    TIDEWAYS_ENV="${TIDEWAYS_ENV:-${XEONYS_PLATFORM_ENV}}"
+
     if [ "$TIDEWAYS_ENV" = "prod" ]; then
         TIDEWAYS_ENV="production"
     fi
