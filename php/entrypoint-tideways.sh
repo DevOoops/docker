@@ -19,7 +19,7 @@ if [ ! -z "$TIDEWAYS_API_KEY" ]; then
 
     # try to get rancher container name
     TIDEWAYS_HOST=${TIDEWAY_HOST:-$(curl -s rancher-metadata/latest/self/container/name)}
-    if [ "$TIDEWAY_HOST" = "" ]; then
+    if [ "$TIDEWAYS_HOST" = "" ]; then
         TIDEWAYS_HOST=$(cat /etc/hostname)
     fi
 
