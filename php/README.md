@@ -7,6 +7,7 @@ Karibbu php docker containers distributed on [docker hub](https://hub.docker.com
 |Name|Description|
 |---|---|
 |UPLOAD_MAX_SIZE|set php upload max size|
+|MEMORY_LIMIT|set php memory limit|
 
 ### tideways
 
