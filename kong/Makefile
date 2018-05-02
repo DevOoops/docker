@@ -8,4 +8,4 @@ build: ## Build docker image
 		-t $(DOCKER_IMAGE_NAME):$(TAG) .
 
 test:
-	docker run -it --entrypoint "/usr/bin/tideways-proxy" --rm $(DOCKER_IMAGE_NAME):$(TAG) --version
+	docker run -it --rm $(DOCKER_IMAGE_NAME):$(TAG) /usr/local/bin/kong version
