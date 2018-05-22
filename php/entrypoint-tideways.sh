@@ -29,6 +29,12 @@ if [ ! -z "$TIDEWAYS_API_KEY" ]; then
 
     echo "Tideways APP_NAME $TIDEWAYS_APP_NAME"
 
+    TIDEWAYS_MONITOR_MODE=${TIDEWAYS_MONITOR_MODE:-BASIC}
+    echo "Tideways TIDEWAYS_MONITOR_MODE $TIDEWAYS_MONITOR_MODE"
+
+    TIDEWAYS_COLLECT_MODE=${TIDEWAYS_COLLECT_MODE:-TRACING}
+    echo "Tideways TIDEWAYS_COLLECT_MODE $TIDEWAYS_COLLECT_MODE"
+
     # Configure tideway daemon with env vars
     printf "\
     TIDEWAYS_DAEMON_EXTRA=\"--hostname=${TIDEWAYS_HOST} --env=${TIDEWAYS_ENV} --server=${TIDEWAYS_PROXY} --insecure\" \n\
@@ -42,6 +48,8 @@ if [ ! -z "$TIDEWAYS_API_KEY" ]; then
     tideways.framework=symfony2 \n\
     tideways.sample_rate=25 \n\
     tideways.monitor_cli=1 \n\
+    tideways.monitor=${TIDEWAYS_MONITOR_MODE} \n\
+    tideways.collect=${TIDEWAYS_COLLECT_MODE} \n\
     " > /usr/local/etc/php/conf.d/tideways.ini
 
     # start daemon
