@@ -10,6 +10,15 @@ if [ ! -z "$UPLOAD_MAX_SIZE" ]; then
     echo "Setting upload_max_filesize & post_max_size to $UPLOAD_MAX_SIZE"
 fi
 
+# setting memory_limit
+if [ ! -z "$MEMORY_LIMIT" ]; then
+    printf "\
+    memory_limit=${MEMORY_LIMIT} \n\
+    " > /usr/local/etc/php/conf.d/memory.ini
+
+    echo "Setting memory_limit to $MEMORY_LIMIT"
+fi
+
 # dont show php errors on prod env
 if [ "$SYMFONY_ENV" = "prod" ]; then
     printf "\
@@ -26,4 +35,3 @@ else
     echo "Starting $@"
     exec $@
 fi
-
