@@ -13,6 +13,8 @@ if [ -f /run/secrets/kong_pg_password ]; then
     echo "Kong pg password found"
 fi
 
+/wait-for.sh "$KONG_PG_HOST:5432"
+
 # Prepare Kong prefix
 if [ "$1" = "/usr/local/openresty/nginx/sbin/nginx" ]; then
 	kong prepare -p "/usr/local/kong"
