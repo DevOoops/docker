@@ -1,11 +1,21 @@
-#!/usr/bin/env sh
+#!/bin/sh
+set -e
 
-# if secret is set
+# Disabling nginx daemon mode
+export KONG_NGINX_DAEMON="off"
+
+# Setting default prefix (override any existing variable)
+export KONG_PREFIX="/usr/local/kong"
+
 if [ -f /run/secrets/kong_pg_password ]; then
-    KONG_PG_PASSWORD=$(cat /run/secrets/kong_pg_password)
+    export KONG_PG_PASSWORD=$(cat /run/secrets/kong_pg_password)
 
     echo "Kong pg password found"
 fi
 
-echo "continue to basic entrypoint with args $@"
-exec /docker-entrypoint.sh $@
+# Prepare Kong prefix
+if [ "$1" = "/usr/local/openresty/nginx/sbin/nginx" ]; then
+	kong prepare -p "/usr/local/kong"
+fi
+
+exec "$@"
