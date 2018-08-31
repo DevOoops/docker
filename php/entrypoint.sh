@@ -15,7 +15,7 @@ if [ ! -z "$K8S_CONTEXT" -a "$(id -g)" = "0" ]; then
     for gid in $(id -G | sed -e 's/^0//') ; do
         groupadd $gid -g $gid
     done
-    usermod -a -G $(id -G | sed -e 's/^0 //' -e 's/ /,/') php
+    usermod -a -G $(id -G | sed -e 's/^0//' -e 's/ /,/g' -e 's/^,//') php
 fi
 
 # setting memory_limit
