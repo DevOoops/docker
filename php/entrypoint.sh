@@ -11,7 +11,7 @@ if [ ! -z "$UPLOAD_MAX_SIZE" ]; then
     echo "Setting upload_max_filesize & post_max_size to $UPLOAD_MAX_SIZE"
 fi
 
-if [ ! -z "$K8S_CONTEXT" ]; then
+if [ ! -z "$K8S_CONTEXT" -a "$(id -g)" = "0" ]; then
     for gid in $(id -G | sed -e 's/^0 //') ; do
         groupadd $gid -g $gid
     done
