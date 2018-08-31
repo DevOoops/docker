@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -e
 
 # setting max upload size
 if [ ! -z "$UPLOAD_MAX_SIZE" ]; then
@@ -8,6 +9,13 @@ if [ ! -z "$UPLOAD_MAX_SIZE" ]; then
     " > /usr/local/etc/php/conf.d/uploads.ini
 
     echo "Setting upload_max_filesize & post_max_size to $UPLOAD_MAX_SIZE"
+fi
+
+if [ ! -z "$K8S_CONTEXT" ]; then
+    for gid in $(id -G | sed -e 's/^0 //') ; do
+        groupadd $gid -g $gid
+    done
+    usermod -a -G $(id -G | sed -e 's/^0 //' -e 's/ /,/') php
 fi
 
 # setting memory_limit
