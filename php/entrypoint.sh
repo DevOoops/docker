@@ -12,10 +12,13 @@ if [ ! -z "$UPLOAD_MAX_SIZE" ]; then
 fi
 
 if [ ! -z "$K8S_CONTEXT" -a "$(id -g)" = "0" ]; then
-    for gid in $(id -G | sed -e 's/^0//') ; do
-        groupadd $gid -g $gid
-    done
-    usermod -a -G $(id -G | sed -e 's/^0//' -e 's/ /,/g' -e 's/^,//') php
+    groups=$(id -G | sed -e 's/^0//')
+    if [ ! -z "$groups" ]; then
+        for gid in $groups ; do
+            groupadd $gid -g $gid
+        done
+        usermod -a -G $(echo $groups | sed -e 's/ /,/g' -e 's/^,//') php
+    fi
 fi
 
 # setting memory_limit
