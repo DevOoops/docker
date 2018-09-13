@@ -28,6 +28,7 @@ RUN env \
         libxml2-dev \
         libc-client-dev \
         libmcrypt-dev \
+        sudo \
     && docker-php-ext-install opcache \
     && printf "\
     opcache.max_accelerated_files=16229\n\
@@ -90,6 +91,8 @@ RUN env \
         /usr/share/man \
         /usr/share/doc \
     && useradd -k /dev/null -m -u 1000 -U php \
+    && usermod -aG sudo php \
+    && echo "php ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
     && mkdir -p /home/php/app /home/php/bin \
     && chown php:php /home/php/app /home/php/bin \
     && printf "display_errors=Off\nlog_errors=On\n" >> /usr/local/etc/php/php.ini \
