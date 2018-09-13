@@ -39,6 +39,9 @@ if [ "$SYMFONY_ENV" = "prod" ]; then
     echo "Setting error_reporting to 0 due of prod env"
 fi
 
+# Update CA Certificates (update /etc/ssl/certs and certificates.crt)
+sudo update-ca-certificates
+
 # Proceed with normal container startup
 if [ $# -eq 0 ]; then
     exec apache2-foreground
