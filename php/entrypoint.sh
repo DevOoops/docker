@@ -6,7 +6,7 @@ if [ ! -z "$UPLOAD_MAX_SIZE" ]; then
     printf "\
     upload_max_filesize=${UPLOAD_MAX_SIZE} \n\
     post_max_size=${UPLOAD_MAX_SIZE} \n\
-    " > /usr/local/etc/php/conf.d/uploads.ini
+    " | sudo tee /usr/local/etc/php/conf.d/uploads.ini > /dev/null
 
     echo "Setting upload_max_filesize & post_max_size to $UPLOAD_MAX_SIZE"
 fi
@@ -25,7 +25,7 @@ fi
 if [ ! -z "$MEMORY_LIMIT" ]; then
     printf "\
     memory_limit=${MEMORY_LIMIT} \n\
-    " > /usr/local/etc/php/conf.d/memory.ini
+    " | sudo tee /usr/local/etc/php/conf.d/memory.ini > /dev/null
 
     echo "Setting memory_limit to $MEMORY_LIMIT"
 fi
@@ -34,7 +34,7 @@ fi
 if [ "$SYMFONY_ENV" = "prod" ]; then
     printf "\
     error_reporting=0 \n\
-    " > /usr/local/etc/php/conf.d/prod.ini
+    " | sudo tee /usr/local/etc/php/conf.d/prod.ini > /dev/null
 
     echo "Setting error_reporting to 0 due of prod env"
 fi

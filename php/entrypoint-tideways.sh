@@ -38,7 +38,7 @@ if [ ! -z "$TIDEWAYS_API_KEY" ]; then
     # Configure tideway daemon with env vars
     printf "\
     TIDEWAYS_DAEMON_EXTRA=\"--hostname=${TIDEWAYS_HOST} --env=${TIDEWAYS_ENV} --server=${TIDEWAYS_PROXY} --insecure\" \n\
-    " > /etc/default/tideways-daemon
+    " | sudo tee /etc/default/tideways-daemon > /dev/null
 
     # Configure tideway agent with env vars
     printf "\
@@ -50,10 +50,10 @@ if [ ! -z "$TIDEWAYS_API_KEY" ]; then
     tideways.monitor_cli=1 \n\
     tideways.monitor=${TIDEWAYS_MONITOR_MODE} \n\
     tideways.collect=${TIDEWAYS_COLLECT_MODE} \n\
-    " > /usr/local/etc/php/conf.d/tideways.ini
+    " | sudo tee /usr/local/etc/php/conf.d/tideways.ini > /dev/null
 
     # start daemon
-    /etc/init.d/tideways-daemon start
+    sudo /etc/init.d/tideways-daemon start
 
 fi
 echo "continue to basic entrypoint with args $@"

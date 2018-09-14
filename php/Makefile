@@ -72,5 +72,16 @@ build:
 
 test:
 	docker run --rm $(DOCKER_IMAGE_NAME):$(TAG) php --version
-	docker run --rm $(DOCKER_IMAGE_NAME):$(TAG) php -m
+	docker run --rm -u php \
+		-e UPLOAD_MAX_SIZE=100M \
+		-e MEMORY_LIMIT=1G \
+		-e SYMFONY_ENV=prod \
+		-e K8S_CONTEXT=1 \
+		$(DOCKER_IMAGE_NAME):$(TAG) php -m
+	docker run --rm -u php \
+		-e MEMORY_LIMIT=1G \
+		$(DOCKER_IMAGE_NAME):$(TAG) ls -lsah /usr/local/etc/php/conf.d/ | grep -q 'memory.ini'
+	docker run --rm -u php \
+		-e TIDEWAYS_API_KEY=abc123 \
+		$(DOCKER_IMAGE_NAME):$(TAG)-tideways ls -lsah /usr/local/etc/php/conf.d/ | grep -q 'tideways.ini'
 	docker run --rm $(DOCKER_IMAGE_NAME):$(TAG)-nodejs nodejs --version

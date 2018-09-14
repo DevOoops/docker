@@ -92,7 +92,11 @@ RUN env \
         /usr/share/doc \
     && useradd -k /dev/null -m -u 1000 -U php \
     && usermod -aG sudo php \
-    && echo "php ALL=(ALL) NOPASSWD: /usr/sbin/update-ca-certificates" >> /etc/sudoers \
+    && echo "php ALL=(ALL) NOPASSWD: \
+/usr/sbin/update-ca-certificates,\
+/usr/bin/tee /usr/local/etc/php/conf.d/*,\
+/usr/bin/tee /etc/default/tideways-daemon,\
+/etc/init.d/tideways-daemon start" >> /etc/sudoers \
     && mkdir -p /home/php/app /home/php/bin \
     && chown php:php /home/php/app /home/php/bin \
     && printf "display_errors=Off\nlog_errors=On\n" >> /usr/local/etc/php/php.ini \
