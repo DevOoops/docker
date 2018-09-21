@@ -56,5 +56,5 @@ if [ $# -eq 0 ]; then
     exec apache2-foreground
 else
     echo "Starting $@"
-    exec $@
+    exec "$@"
 fi

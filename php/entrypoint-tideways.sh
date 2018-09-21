@@ -57,4 +57,4 @@ if [ ! -z "$TIDEWAYS_API_KEY" ]; then
 
 fi
 echo "continue to basic entrypoint with args $@"
-exec /entrypoint.sh $@
+exec /entrypoint.sh "$@"
