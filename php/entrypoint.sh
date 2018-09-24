@@ -22,7 +22,7 @@ if [ ! -z "$K8S_CONTEXT" -a "$(id -g)" = "0" ]; then
 fi
 
 # warm symfony cache before real run of the app, avoiding edge cases
-if [[ ! -z "$SYMFONY_ENV" && $(which console) ]] ; then
+if { [ ! -z "$SYMFONY_ENV" ] && [ $(which console) ];} ; then
     if [ $(whoami) = "php" ] ; then
         console cache:warmup
     else
