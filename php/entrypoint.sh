@@ -21,15 +21,6 @@ if [ ! -z "$K8S_CONTEXT" -a "$(id -g)" = "0" ]; then
     fi
 fi
 
-# warm symfony cache before real run of the app, avoiding edge cases
-if { [ ! -z "$SYMFONY_ENV" ] && [ $(which console) ];} ; then
-    if [ $(whoami) = "php" ] ; then
-        console cache:warmup
-    else
-        gosu php console cache:warmup
-    fi
-fi
-
 # setting memory_limit
 if [ ! -z "$MEMORY_LIMIT" ]; then
     printf "\
@@ -53,6 +44,7 @@ sudo update-ca-certificates
 
 # Proceed with normal container startup
 if [ $# -eq 0 ]; then
+    gosu php console cache:warmup
     exec apache2-foreground
 else
     echo "Starting $@"
