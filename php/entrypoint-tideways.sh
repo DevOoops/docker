@@ -7,6 +7,12 @@ if [ -f /run/secrets/tideways_api_key ]; then
 
     echo "Tideways secret found"
 fi
+# if secret(k8s) is set
+if { [ -f /run/secrets/shared/tideways_api_key ] && [ ! -z "$TIDEWAYS_APP_NAME" ];}; then
+    TIDEWAYS_API_KEY=$(cat /run/secrets/shared/tideways_api_key)
+
+    echo "Tideways secret found"
+fi
 
 # if env or secret is set
 if [ ! -z "$TIDEWAYS_API_KEY" ]; then
@@ -18,7 +24,10 @@ if [ ! -z "$TIDEWAYS_API_KEY" ]; then
     echo "Tideways ENV $TIDEWAYS_ENV"
 
     # try to get rancher container name
-    TIDEWAYS_HOST=${TIDEWAY_HOST:-$(curl -s rancher-metadata/latest/self/container/name)}
+    if [ "$K8S_CONTEXT" = "" ]; then
+        TIDEWAYS_HOST=${TIDEWAY_HOST:-$(curl -s rancher-metadata/latest/self/container/name)}
+    fi
+
     if [ "$TIDEWAYS_HOST" = "" ]; then
         TIDEWAYS_HOST=$(cat /etc/hostname)
     fi
