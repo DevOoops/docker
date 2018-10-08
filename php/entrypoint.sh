@@ -15,7 +15,7 @@ fi
 if { [ ! -z "$REDIS_HOST" ] && [ ! -z "$APP_NAME" ];}; then
     printf "\
     session.save_handler = redis \n\
-    session.save_path = \"tcp://${REDIS_HOST}:6379?weight=1&prefix=${XEONYS_PLATFORM_ENV}-${XEONYS_PLATFORM}-${APP_NAME}\" \n\
+    session.save_path = \"tcp://${REDIS_HOST}:6379?weight=1&prefix=${XEONYS_PLATFORM_ENV}-${XEONYS_PLATFORM}-${APP_NAME}:session:\" \n\
     " | sudo tee /usr/local/etc/php/conf.d/sessions.ini > /dev/null
 
     echo "Setting redis session on $REDIS_HOST server"
