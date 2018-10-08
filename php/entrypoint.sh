@@ -1,16 +1,6 @@
 #!/usr/bin/env sh
 set -e
 
-# setting max upload size
-if [ ! -z "$UPLOAD_MAX_SIZE" ]; then
-    printf "\
-    upload_max_filesize=${UPLOAD_MAX_SIZE} \n\
-    post_max_size=${UPLOAD_MAX_SIZE} \n\
-    " | sudo tee /usr/local/etc/php/conf.d/uploads.ini > /dev/null
-
-    echo "Setting upload_max_filesize & post_max_size to $UPLOAD_MAX_SIZE"
-fi
-
 if [ ! -z "$K8S_CONTEXT" -a "$(id -g)" = "0" ]; then
     groups=$(id -G | sed -e 's/^0//')
     if [ ! -z "$groups" ]; then
@@ -19,6 +9,26 @@ if [ ! -z "$K8S_CONTEXT" -a "$(id -g)" = "0" ]; then
         done
         usermod -a -G $(echo $groups | sed -e 's/ /,/g' -e 's/^,//') php
     fi
+fi
+
+# setting redis session handler
+if { [ ! -z "$REDIS_HOST" ] && [ ! -z "$APP_NAME" ];}; then
+    printf "\
+    session.save_handler = redis \n\
+    session.save_path = \"tcp://${REDIS_HOST}:6379?weight=1&prefix=${XEONYS_PLATFORM_ENV}-${XEONYS_PLATFORM}-${APP_NAME}\" \n\
+    " | sudo tee /usr/local/etc/php/conf.d/sessions.ini > /dev/null
+
+    echo "Setting redis session on $REDIS_HOST server"
+fi
+
+# setting max upload size
+if [ ! -z "$UPLOAD_MAX_SIZE" ]; then
+    printf "\
+    upload_max_filesize=${UPLOAD_MAX_SIZE} \n\
+    post_max_size=${UPLOAD_MAX_SIZE} \n\
+    " | sudo tee /usr/local/etc/php/conf.d/uploads.ini > /dev/null
+
+    echo "Setting upload_max_filesize & post_max_size to $UPLOAD_MAX_SIZE"
 fi
 
 # setting memory_limit
