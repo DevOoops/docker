@@ -23,6 +23,7 @@ RUN env \
     && apt-get install -y curl git-core \
     && apt-get install -y \
         zlib1g-dev \
+        libzip-dev \
         libicu-dev \
         libpq-dev \
         libxml2-dev \
@@ -70,8 +71,8 @@ RUN env \
         apt-get install -y libmemcached-dev \
         && pecl install memcached-${MEMCACHED_VERSION} \
         && docker-php-ext-enable --ini-name 100-memcached.ini memcached \
-        && apt-get remove --purge -y libmemcached-dev zlib1g-dev \
-        && apt-get install -y libmemcached11 libmemcachedutil2; \
+        && apt-get remove --purge -y libmemcached-dev zlib1g-dev libzip-dev \
+        && apt-get install -y libmemcached11 libmemcachedutil2 libzip4; \
     fi \
     && if [ -z "$REDIS_VERSION" ] ; then \
         echo "Don't installing redis extension"; \
@@ -90,7 +91,6 @@ RUN env \
     fi \
     && docker-php-source delete \
     && apt-get remove --purge -y libx11-6 $PHPIZE_DEPS \
-    && apt-get -y autoremove \
     && apt-get autoremove -y \
     && apt-get autoclean -y \
     && apt-get clean -y \
