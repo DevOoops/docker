@@ -30,9 +30,11 @@ RUN env \
         libpq-dev \
         libxml2-dev \
         libc-client-dev \
-        libmcrypt-dev \
         sudo \
         gosu \
+    && if $(dpkg --compare-versions "${PHP_VERSION}" "lt" "7.2.0"); then \
+        apt-get install -y libmcrypt-dev; \
+    fi \
     && docker-php-ext-install opcache \
     && printf "\
     opcache.max_accelerated_files=16229\n\
@@ -44,21 +46,27 @@ RUN env \
         zip \
         intl \
         bcmath \
-        mcrypt \
         pgsql \
         pdo_pgsql \
+    && if $(dpkg --compare-versions "${PHP_VERSION}" "lt" "7.2.0"); then \
+        docker-php-ext-install mcrypt; \
+    fi \
     && apt-get remove --purge -y \
         libicu-dev \
         icu-devtools \
         libpq-dev \
         libxml2-dev \
         libc-client-dev \
-        libmcrypt-dev \
+    && if $(dpkg --compare-versions "${PHP_VERSION}" "lt" "7.2.0"); then \
+        apt-get remove --purge -y libmcrypt-dev; \
+    fi \
     && apt-get install -y \
         $(apt-cache search libicu5 | awk '{ print $1 }' | grep -v '-') \
         libc-client2007e \
         libpq5 \
-        libmcrypt4 \
+    && if $(dpkg --compare-versions "${PHP_VERSION}" "lt" "7.2.0"); then \
+        apt-get install -y libmcrypt4; \
+    fi \
     && if [ -z "$MEMCACHED_VERSION" ] ; then \
         echo "Don't installing memcached extension"; \
     else \
