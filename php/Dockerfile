@@ -55,7 +55,7 @@ RUN env \
         libc-client-dev \
         libmcrypt-dev \
     && apt-get install -y \
-        libicu52 \
+        $(apt-cache search libicu5 | awk '{ print $1 }' | grep -v '-') \
         libc-client2007e \
         libpq5 \
         libmcrypt4 \
@@ -156,7 +156,8 @@ ENTRYPOINT ["/entrypoint.sh"]
 FROM base as nodejs
 
 USER root
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+RUN apt-get install -y gnupg2 \
+    && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
     && apt-get install -y nodejs \
     && apt-get -y autoremove \
     && apt-get autoremove -y \
@@ -168,7 +169,8 @@ USER php
 FROM base as tideways
 
 USER root
-RUN echo 'deb http://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages debian main' > /etc/apt/sources.list.d/tideways.list \
+RUN apt-get install -y gnupg2 \
+    && echo 'deb http://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages debian main' > /etc/apt/sources.list.d/tideways.list \
     && curl -sL https://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages/EEB5E8F4.gpg | apt-key add - \
     && apt-get update \
     && apt-get install tideways-php tideways-daemon \
@@ -186,7 +188,8 @@ ENTRYPOINT ["/entrypoint-tideways.sh"]
 FROM nodejs as nodejs-tideways
 
 USER root
-RUN echo 'deb http://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages debian main' > /etc/apt/sources.list.d/tideways.list \
+RUN apt-get install -y gnupg2 \
+    && echo 'deb http://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages debian main' > /etc/apt/sources.list.d/tideways.list \
     && curl -sL https://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages/EEB5E8F4.gpg | apt-key add - \
     && apt-get update \
     && apt-get install tideways-php tideways-daemon \
