@@ -12,6 +12,12 @@ env:
         - IMAGE_NAME=php PHP_VERSION=7.3-rc PHP_VARIANT=apache
         - IMAGE_NAME=tideways-proxy
         - IMAGE_NAME=kong KONG_VERSION=0.13.1
+
+matrix:
+    allow_failures:
+        - env: IMAGE_NAME=php PHP_VERSION=7.3-rc PHP_VARIANT=apache
+    fast_finish: true
+
 before_install:
     - >
         if [ ! -z "${DOCKER_EXPERIMENTAL}" ] ; then
