@@ -18,9 +18,6 @@ RUN env \
     zend.assertions=-1\n\
     " > /usr/local/etc/php/php.ini \
     && docker-php-source extract \
-    && if [ $(grep -c jessie /etc/apt/sources.list) -ne 0 ] ; \
-        then echo 'deb http://ftp.debian.org/debian jessie-backports main' >> /etc/apt/sources.list; \
-    fi \
     && apt-get update \
     && apt-get install -y cron supervisor \
     && apt-get install -y curl git-core \
