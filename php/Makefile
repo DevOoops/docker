@@ -10,10 +10,6 @@ PRESTISSIMO_VERSION?=0.3.8
 
 build:
 	@docker build --rm \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG) \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-nodejs \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-tideways \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-nodejs-tideways \
 		--build-arg IMAGE_NAME=$(IMAGE_NAME) \
 		--build-arg PHP_VERSION=$(PHP_VERSION) \
 		--build-arg PHP_VARIANT=$(PHP_VARIANT) \
@@ -25,10 +21,6 @@ build:
 		--target base \
 		-t $(DOCKER_IMAGE_NAME):$(TAG) .
 	@docker build --rm \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG) \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-nodejs \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-tideways \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-nodejs-tideways \
 		--build-arg IMAGE_NAME=$(IMAGE_NAME) \
 		--build-arg PHP_VERSION=$(PHP_VERSION) \
 		--build-arg PHP_VARIANT=$(PHP_VARIANT) \
@@ -40,10 +32,6 @@ build:
 		--target nodejs \
 		-t $(DOCKER_IMAGE_NAME):$(TAG)-nodejs .
 	@docker build --rm \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG) \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-nodejs \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-tideways \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-nodejs-tideways \
 		--build-arg IMAGE_NAME=$(IMAGE_NAME) \
 		--build-arg PHP_VERSION=$(PHP_VERSION) \
 		--build-arg PHP_VARIANT=$(PHP_VARIANT) \
@@ -55,10 +43,6 @@ build:
 		--target tideways \
 		-t $(DOCKER_IMAGE_NAME):$(TAG)-tideways .
 	@docker build --rm \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG) \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-nodejs \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-tideways \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-nodejs-tideways \
 		--build-arg IMAGE_NAME=$(IMAGE_NAME) \
 		--build-arg PHP_VERSION=$(PHP_VERSION) \
 		--build-arg PHP_VARIANT=$(PHP_VARIANT) \
