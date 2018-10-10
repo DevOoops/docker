@@ -18,21 +18,21 @@ RUN env \
     zend.assertions=-1\n\
     " > /usr/local/etc/php/php.ini \
     && docker-php-source extract \
-    && if [ $(grep -c jessie /etc/apt/sources.list) -ne 0 ] ; \
-        then echo 'deb http://ftp.debian.org/debian jessie-backports main' >> /etc/apt/sources.list; \
-    fi \
     && apt-get update \
     && apt-get install -y cron supervisor \
     && apt-get install -y curl git-core \
     && apt-get install -y \
         zlib1g-dev \
+        libzip-dev \
         libicu-dev \
         libpq-dev \
         libxml2-dev \
         libc-client-dev \
-        libmcrypt-dev \
         sudo \
         gosu \
+    && if $(dpkg --compare-versions "${PHP_VERSION}" "lt" "7.2.0"); then \
+        apt-get install -y libmcrypt-dev; \
+    fi \
     && docker-php-ext-install opcache \
     && printf "\
     opcache.max_accelerated_files=16229\n\
@@ -44,29 +44,35 @@ RUN env \
         zip \
         intl \
         bcmath \
-        mcrypt \
         pgsql \
         pdo_pgsql \
+    && if $(dpkg --compare-versions "${PHP_VERSION}" "lt" "7.2.0"); then \
+        docker-php-ext-install mcrypt; \
+    fi \
     && apt-get remove --purge -y \
         libicu-dev \
         icu-devtools \
         libpq-dev \
         libxml2-dev \
         libc-client-dev \
-        libmcrypt-dev \
+    && if $(dpkg --compare-versions "${PHP_VERSION}" "lt" "7.2.0"); then \
+        apt-get remove --purge -y libmcrypt-dev; \
+    fi \
     && apt-get install -y \
-        libicu52 \
+        $(apt-cache search libicu5 | awk '{ print $1 }' | grep -v '-') \
         libc-client2007e \
         libpq5 \
-        libmcrypt4 \
+    && if $(dpkg --compare-versions "${PHP_VERSION}" "lt" "7.2.0"); then \
+        apt-get install -y libmcrypt4; \
+    fi \
     && if [ -z "$MEMCACHED_VERSION" ] ; then \
         echo "Don't installing memcached extension"; \
     else \
         apt-get install -y libmemcached-dev \
         && pecl install memcached-${MEMCACHED_VERSION} \
         && docker-php-ext-enable --ini-name 100-memcached.ini memcached \
-        && apt-get remove --purge -y libmemcached-dev zlib1g-dev \
-        && apt-get install -y libmemcached11 libmemcachedutil2; \
+        && apt-get remove --purge -y libmemcached-dev zlib1g-dev libzip-dev \
+        && apt-get install -y libmemcached11 libmemcachedutil2 libzip4; \
     fi \
     && if [ -z "$REDIS_VERSION" ] ; then \
         echo "Don't installing redis extension"; \
@@ -85,7 +91,6 @@ RUN env \
     fi \
     && docker-php-source delete \
     && apt-get remove --purge -y libx11-6 $PHPIZE_DEPS \
-    && apt-get -y autoremove \
     && apt-get autoremove -y \
     && apt-get autoclean -y \
     && apt-get clean -y \
@@ -156,7 +161,8 @@ ENTRYPOINT ["/entrypoint.sh"]
 FROM base as nodejs
 
 USER root
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+RUN apt-get install -y gnupg2 \
+    && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
     && apt-get install -y nodejs \
     && apt-get -y autoremove \
     && apt-get autoremove -y \
@@ -168,7 +174,8 @@ USER php
 FROM base as tideways
 
 USER root
-RUN echo 'deb http://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages debian main' > /etc/apt/sources.list.d/tideways.list \
+RUN apt-get install -y gnupg2 \
+    && echo 'deb http://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages debian main' > /etc/apt/sources.list.d/tideways.list \
     && curl -sL https://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages/EEB5E8F4.gpg | apt-key add - \
     && apt-get update \
     && apt-get install tideways-php tideways-daemon \
@@ -186,7 +193,8 @@ ENTRYPOINT ["/entrypoint-tideways.sh"]
 FROM nodejs as nodejs-tideways
 
 USER root
-RUN echo 'deb http://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages debian main' > /etc/apt/sources.list.d/tideways.list \
+RUN apt-get install -y gnupg2 \
+    && echo 'deb http://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages debian main' > /etc/apt/sources.list.d/tideways.list \
     && curl -sL https://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages/EEB5E8F4.gpg | apt-key add - \
     && apt-get update \
     && apt-get install tideways-php tideways-daemon \
