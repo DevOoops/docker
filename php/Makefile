@@ -4,16 +4,12 @@ include ../Makefile
 
 APCUBC_VERSION?=1.0.4
 MEMCACHED_VERSION?=3.0.4
-REDIS_VERSION?=4.1.1
+REDIS_VERSION?=3.1.6
 COMPOSER_VERSION?=1.7.2
 PRESTISSIMO_VERSION?=0.3.8
 
 build:
-	@docker build --rm \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG) \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-nodejs \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-tideways \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-nodejs-tideways \
+	@docker build --quiet --rm \
 		--build-arg IMAGE_NAME=$(IMAGE_NAME) \
 		--build-arg PHP_VERSION=$(PHP_VERSION) \
 		--build-arg PHP_VARIANT=$(PHP_VARIANT) \
@@ -24,11 +20,7 @@ build:
 		--build-arg PRESTISSIMO_VERSION=$(PRESTISSIMO_VERSION) \
 		--target base \
 		-t $(DOCKER_IMAGE_NAME):$(TAG) .
-	@docker build --rm \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG) \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-nodejs \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-tideways \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-nodejs-tideways \
+	@docker build --quiet --rm \
 		--build-arg IMAGE_NAME=$(IMAGE_NAME) \
 		--build-arg PHP_VERSION=$(PHP_VERSION) \
 		--build-arg PHP_VARIANT=$(PHP_VARIANT) \
@@ -39,11 +31,7 @@ build:
 		--build-arg PRESTISSIMO_VERSION=$(PRESTISSIMO_VERSION) \
 		--target nodejs \
 		-t $(DOCKER_IMAGE_NAME):$(TAG)-nodejs .
-	@docker build --rm \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG) \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-nodejs \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-tideways \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-nodejs-tideways \
+	@docker build --quiet --rm \
 		--build-arg IMAGE_NAME=$(IMAGE_NAME) \
 		--build-arg PHP_VERSION=$(PHP_VERSION) \
 		--build-arg PHP_VARIANT=$(PHP_VARIANT) \
@@ -54,11 +42,7 @@ build:
 		--build-arg PRESTISSIMO_VERSION=$(PRESTISSIMO_VERSION) \
 		--target tideways \
 		-t $(DOCKER_IMAGE_NAME):$(TAG)-tideways .
-	@docker build --rm \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG) \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-nodejs \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-tideways \
-		--cache-from $(DOCKER_IMAGE_NAME):$(TAG)-nodejs-tideways \
+	@docker build --quiet --rm \
 		--build-arg IMAGE_NAME=$(IMAGE_NAME) \
 		--build-arg PHP_VERSION=$(PHP_VERSION) \
 		--build-arg PHP_VARIANT=$(PHP_VARIANT) \
