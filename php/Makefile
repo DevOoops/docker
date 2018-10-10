@@ -9,7 +9,7 @@ COMPOSER_VERSION?=1.7.2
 PRESTISSIMO_VERSION?=0.3.8
 
 build:
-	@docker build --progress=plain --rm \
+	@docker build -q --rm \
 		--build-arg IMAGE_NAME=$(IMAGE_NAME) \
 		--build-arg PHP_VERSION=$(PHP_VERSION) \
 		--build-arg PHP_VARIANT=$(PHP_VARIANT) \
@@ -20,7 +20,7 @@ build:
 		--build-arg PRESTISSIMO_VERSION=$(PRESTISSIMO_VERSION) \
 		--target base \
 		-t $(DOCKER_IMAGE_NAME):$(TAG) .
-	@docker build --progress=plain --rm \
+	@docker build -q --rm \
 		--build-arg IMAGE_NAME=$(IMAGE_NAME) \
 		--build-arg PHP_VERSION=$(PHP_VERSION) \
 		--build-arg PHP_VARIANT=$(PHP_VARIANT) \
@@ -31,7 +31,7 @@ build:
 		--build-arg PRESTISSIMO_VERSION=$(PRESTISSIMO_VERSION) \
 		--target nodejs \
 		-t $(DOCKER_IMAGE_NAME):$(TAG)-nodejs .
-	@docker build --progress=plain --rm \
+	@docker build -q --rm \
 		--build-arg IMAGE_NAME=$(IMAGE_NAME) \
 		--build-arg PHP_VERSION=$(PHP_VERSION) \
 		--build-arg PHP_VARIANT=$(PHP_VARIANT) \
@@ -42,7 +42,7 @@ build:
 		--build-arg PRESTISSIMO_VERSION=$(PRESTISSIMO_VERSION) \
 		--target tideways \
 		-t $(DOCKER_IMAGE_NAME):$(TAG)-tideways .
-	@docker build --progress=plain --rm \
+	@docker build -q --rm \
 		--build-arg IMAGE_NAME=$(IMAGE_NAME) \
 		--build-arg PHP_VERSION=$(PHP_VERSION) \
 		--build-arg PHP_VARIANT=$(PHP_VARIANT) \
