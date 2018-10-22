@@ -31,6 +31,15 @@ if [ ! -z "$UPLOAD_MAX_SIZE" ]; then
     echo "Setting upload_max_filesize & post_max_size to $UPLOAD_MAX_SIZE"
 fi
 
+# setting max execution time
+if [ ! -z "$MAX_EXECUTION_TIME" ]; then
+    printf "\
+    max_execution_time=${MAX_EXECUTION_TIME} \n\
+    " | sudo tee /usr/local/etc/php/conf.d/execution_time.ini > /dev/null
+
+    echo "Setting max_execution_time to $MAX_EXECUTION_TIME"
+fi
+
 # setting memory_limit
 if [ ! -z "$MEMORY_LIMIT" ]; then
     printf "\
