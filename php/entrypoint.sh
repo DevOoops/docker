@@ -49,6 +49,15 @@ if [ ! -z "$MEMORY_LIMIT" ]; then
     echo "Setting memory_limit to $MEMORY_LIMIT"
 fi
 
+# setting max_input_vars
+if [ ! -z "$MAX_INPUT_VARS" ]; then
+    printf "\
+    max_input_vars=${MAX_INPUT_VARS} \n\
+    " | sudo tee /usr/local/etc/php/conf.d/input.ini > /dev/null
+
+    echo "Setting max_input_vars to $MAX_INPUT_VARS"
+fi
+
 # dont show php errors on prod env
 if [ "$SYMFONY_ENV" = "prod" ]; then
     printf "\
