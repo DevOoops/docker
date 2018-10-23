@@ -8,8 +8,8 @@ env:
         - DOCKER_BUILDKIT=1
         - MAKEFLAGS="--jobs=2 --max-load=4"
     matrix:
-        - IMAGE_NAME=php PHP_VERSION=7.1.22 PHP_VARIANT=apache
-        - IMAGE_NAME=php PHP_VERSION=7.2.10 PHP_VARIANT=apache
+        - IMAGE_NAME=php PHP_VERSION=7.1.23 PHP_VARIANT=apache
+        - IMAGE_NAME=php PHP_VERSION=7.2.11 PHP_VARIANT=apache
         - IMAGE_NAME=php PHP_VERSION=7.3-rc PHP_VARIANT=apache
         - IMAGE_NAME=tideways-proxy
         - IMAGE_NAME=kong KONG_VERSION=0.13.1
