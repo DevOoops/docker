@@ -130,7 +130,8 @@ RUN env \
 \t\tHeader always set Referrer-Policy \"strict-origin\"\n\
 \t</Directory>\n\
 </IfModule>\n\
-" > /etc/apache2/conf-enabled/headers.conf; \
+" > /etc/apache2/conf-enabled/headers.conf \
+    && rm /var/log/apache2/access.log && ln -s /dev/null /var/log/apache2/access.log; \
     fi
 
 USER php
