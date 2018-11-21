@@ -156,6 +156,7 @@ RUN if [ -z "$PRESTISSIMO_VERSION" ] || [ "$PRESTISSIMO_VERSION$COMPOSER_VERSION
 WORKDIR /home/php/app
 
 COPY entrypoint.sh /
+COPY consumer.sh /
 
 ENTRYPOINT ["/entrypoint.sh"]
 
