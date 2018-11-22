@@ -1,4 +1,15 @@
 #!/usr/bin/env sh
+
+while getopts ":s:" opt; do
+  case ${opt} in
+    s )
+      sleep=$OPTARG
+      ;;
+  esac
+done
+sleep="${sleep:-2}"
+shift $((OPTIND -1))
+
 LOOP=1
 exit_script() {
     trap - INT TERM # clear the trap
@@ -23,6 +34,6 @@ trap exit_script INT TERM
 
 echo "Running subprocess loop"
 while [ $LOOP -eq 1 ] ; do
-        "$@" & wait
-        sleep 2
+    "$@" & wait
+    sleep $sleep
 done
