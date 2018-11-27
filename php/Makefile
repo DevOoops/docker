@@ -1,4 +1,6 @@
 TAG=$(PHP_VERSION)-$(PHP_VARIANT)
+CUST_TAG=$(shell echo $(TAG) | sed -e 's/^\([0-9]*\.[0-9]*\)\.[0-9]*/\1/g')
+
 TAGS_TO_PULL=$(TAG) $(TAG)-nodejs $(TAG)-tideways $(TAG)-nodejs-tideways
 include ../Makefile
 
@@ -74,3 +76,9 @@ test:
 		-e TIDEWAYS_API_KEY=abc123 \
 		$(DOCKER_IMAGE_NAME):$(TAG)-tideways ls -lsah /usr/local/etc/php/conf.d/ | grep -q 'tideways.ini'
 	docker run --rm $(DOCKER_IMAGE_NAME):$(TAG)-nodejs nodejs --version
+
+tag:
+	docker tag $(DOCKER_IMAGE_NAME):$(TAG)                 $(DOCKER_IMAGE_NAME):$(CUST_TAG)
+	docker tag $(DOCKER_IMAGE_NAME):$(TAG)-tideways        $(DOCKER_IMAGE_NAME):$(CUST_TAG)-tideways
+	docker tag $(DOCKER_IMAGE_NAME):$(TAG)-nodejs          $(DOCKER_IMAGE_NAME):$(CUST_TAG)-nodejs
+	docker tag $(DOCKER_IMAGE_NAME):$(TAG)-nodejs-tideways $(DOCKER_IMAGE_NAME):$(CUST_TAG)-nodejs-tideways
