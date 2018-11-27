@@ -5,6 +5,7 @@ FROM ${IMAGE_NAME}:${PHP_VERSION}-${PHP_VARIANT} as base
 
 ARG MEMCACHED_VERSION
 ARG REDIS_VERSION
+ARG REDIS_NEXT_VERSION
 ARG APCUBC_VERSION
 ARG PHP_VARIANT
 
@@ -77,7 +78,10 @@ RUN env \
     && if [ -z "$REDIS_VERSION" ] ; then \
         echo "Don't installing redis extension"; \
     else \
-        pecl install redis-${REDIS_VERSION} \
+        PHP_EXT_DIR=$(pecl config-get ext_dir); \
+        pecl install redis-${REDIS_NEXT_VERSION} \
+        && mv $PHP_EXT_DIR/redis.so $PHP_EXT_DIR/redis-next.so \
+        && pecl install -f redis-${REDIS_VERSION} \
         && docker-php-ext-enable --ini-name 100-redis.ini redis; \
     fi \
     && if [ -z "$APCUBC_VERSION" ] ; then \
