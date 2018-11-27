@@ -31,6 +31,15 @@ if [ ! -z "$UPLOAD_MAX_SIZE" ]; then
     echo "Setting upload_max_filesize & post_max_size to $UPLOAD_MAX_SIZE"
 fi
 
+# setting redis extension to next
+if [ ! -z "$USE_REDIS_NEXT" ]; then
+    printf "\
+    extension=redis-next.so \n\
+    " > /usr/local/etc/php/conf.d/100-redis.ini
+
+    echo "Setting Next redis extension"
+fi
+
 # setting max execution time
 if [ ! -z "$MAX_EXECUTION_TIME" ]; then
     printf "\
