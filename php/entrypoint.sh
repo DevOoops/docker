@@ -35,7 +35,7 @@ fi
 if [ ! -z "$USE_REDIS_NEXT" ]; then
     printf "\
     extension=redis-next.so \n\
-    " > /usr/local/etc/php/conf.d/100-redis.ini
+    " | sudo tee /usr/local/etc/php/conf.d/100-redis.ini > /dev/null
 
     echo "Setting Next redis extension"
 fi
