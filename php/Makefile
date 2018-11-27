@@ -78,11 +78,6 @@ test:
 	docker run --rm $(DOCKER_IMAGE_NAME):$(TAG)-nodejs nodejs --version
 
 tag:
-	docker tag $(DOCKER_IMAGE_NAME):$(TAG)                 $(DOCKER_IMAGE_NAME):$(LATEST_TAG)
-	docker tag $(DOCKER_IMAGE_NAME):$(TAG)-tideways        $(DOCKER_IMAGE_NAME):$(LATEST_TAG)-tideways
-	docker tag $(DOCKER_IMAGE_NAME):$(TAG)-nodejs          $(DOCKER_IMAGE_NAME):$(LATEST_TAG)-nodejs
-	docker tag $(DOCKER_IMAGE_NAME):$(TAG)-nodejs-tideways $(DOCKER_IMAGE_NAME):$(LATEST_TAG)-nodejs-tideways
-
 	docker tag $(DOCKER_IMAGE_NAME):$(TAG)                 $(DOCKER_IMAGE_NAME):$(CUST_TAG)
 	docker tag $(DOCKER_IMAGE_NAME):$(TAG)-tideways        $(DOCKER_IMAGE_NAME):$(CUST_TAG)-tideways
 	docker tag $(DOCKER_IMAGE_NAME):$(TAG)-nodejs          $(DOCKER_IMAGE_NAME):$(CUST_TAG)-nodejs
