@@ -92,20 +92,16 @@ while [ $LOOP -eq 1 ] ; do
     if { [ $exponential_backoff_opt -eq 1 ] && [ $exitCode -ne 0 ] ;} ; then
         sleep=$(pow 2 $failed_attempt);
         if [ $sleep -gt $exponential_backoff_sleep_additional_max ] ; then 
-            sleep=$exponential_backoff_sleep_additional_max;
-            echo "Subprocess failure, max interval reached, sleeping ${sleep}s + ${noise}s (random noise)"
+            echo "Subprocess failure, max exponential back off retries reached, exiting"
+            exit 2
         fi
-        echo "Subprocess failure with exit code: $exitCode, attempt: $failed_attempt retrying in ${sleep}s + ${noise}s (random noise)"
+        sleep=$((sleep + interval_opt))
+        echo "Subprocess failure with exit code: $exitCode, attempt: $failed_attempt retrying in ${sleep}s + ${interval_opt}s (sleep interval) + ${noise}s (random noise)"
         failed_attempt=$(( failed_attempt + 1 ))
     fi
 
-    # EB is ON and subprocess succeeded
-    if { [ $exponential_backoff_opt -eq 1 ] && [ $exitCode -eq 0 ] ;} ; then
-        failed_attempt=0
-    fi
-
-    # EB is OFF and subprocess succeeded
-    if { [ $exponential_backoff_opt -eq 0 ] && [ $exitCode -eq 0 ] ;} ; then
+    # Subprocess succeeded
+    if [ $exitCode -eq 0 ] ; then
         failed_attempt=0
     fi
 
