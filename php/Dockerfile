@@ -18,6 +18,7 @@ RUN env \
     short_open_tag=Off\n\
     zend.assertions=-1\n\
     session.cookie_lifetime=86400\n\
+    session.cookie_secure=On\n\
     " > /usr/local/etc/php/php.ini \
     && docker-php-source extract \
     && apt-get update \
