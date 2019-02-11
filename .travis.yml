@@ -8,6 +8,7 @@ env:
         - DOCKER_BUILDKIT=1
         - MAKEFLAGS="--jobs=2 --max-load=4"
     matrix:
+        - IMAGE_NAME=node NODE_VERSION=latest WATCHMAN_VERSION=v4.9.0
         - IMAGE_NAME=php PHP_VERSION=7.1.26 PHP_VARIANT=apache
         - IMAGE_NAME=php PHP_VERSION=7.2.14 PHP_VARIANT=apache
         - IMAGE_NAME=php PHP_VERSION=7.3.1 PHP_VARIANT=apache
