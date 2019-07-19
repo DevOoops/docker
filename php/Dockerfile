@@ -171,7 +171,7 @@ FROM base as nodejs
 USER root
 RUN apt-get install -y gnupg2 \
     && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
-    && apt-get install -y nodejs \
+    && apt-get install -y nodejs npm \
     && apt-get -y autoremove \
     && apt-get autoremove -y \
     && apt-get autoclean -y \
