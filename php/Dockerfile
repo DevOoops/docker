@@ -137,7 +137,8 @@ RUN env \
 \t</Directory>\n\
 </IfModule>\n\
 " > /etc/apache2/conf-enabled/headers.conf \
-    && rm /var/log/apache2/access.log && ln -s /dev/null /var/log/apache2/access.log; \
+    && rm /var/log/apache2/access.log && ln -s /dev/null /var/log/apache2/access.log \
+    && sed -i 's/MaxConnectionsPerChild\s*0/MaxConnectionsPerChild\t1000/g' /etc/apache2/mods-enabled/mpm_prefork.conf; \
     fi
 
 USER php
