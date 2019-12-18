@@ -9,6 +9,7 @@ env:
     - MAKEFLAGS="--jobs=2 --max-load=4"
   matrix:
     - IMAGE_NAME=node NODE_VERSION=10 WATCHMAN_VERSION=v4.9.0
+    - IMAGE_NAME=node NODE_VERSION=12 WATCHMAN_VERSION=v4.9.0
     - IMAGE_NAME=pg-node NODE_VERSION=8.16.0 NODE_MAJOR=8.x PG_VERSION=10.6
     - IMAGE_NAME=pg-node NODE_VERSION=10.15.3 NODE_MAJOR=10.x PG_VERSION=10.6
     - IMAGE_NAME=php PHP_VERSION=7.1 PHP_VARIANT=apache
@@ -22,6 +23,7 @@ env:
 matrix:
   allow_failures:
     - env: IMAGE_NAME=pg-node NODE_VERSION=10.15.3 NODE_MAJOR=10.x PG_VERSION=10.6
+    - env: IMAGE_NAME=node NODE_VERSION=12 WATCHMAN_VERSION=v4.9.0    
   fast_finish: true
 
 before_install:
