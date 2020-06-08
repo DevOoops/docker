@@ -56,6 +56,10 @@ if [ ! -z "$TIDEWAYS_API_KEY" ]; then
     tideways.service=${TIDEWAYS_APP_NAME} \n\
     tideways.framework=symfony2 \n\
     tideways.sample_rate=25 \n\
+    tideways.features.phpinfo=1 \n\
+    tideways.features.deprecations=1 \n\
+    tideways.dynamic_tracepoints.enable_web=1 \n\
+    tideways.dynamic_tracepoints.enable_cli=1 \n\
     tideways.monitor_cli=1 \n\
     tideways.monitor=${TIDEWAYS_MONITOR_MODE} \n\
     tideways.collect=${TIDEWAYS_COLLECT_MODE} \n\
