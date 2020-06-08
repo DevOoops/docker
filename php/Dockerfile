@@ -183,8 +183,8 @@ FROM base as tideways
 
 USER root
 RUN apt-get install -y gnupg2 \
-    && echo 'deb http://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages debian main' > /etc/apt/sources.list.d/tideways.list \
-    && curl -sL https://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages/EEB5E8F4.gpg | apt-key add - \
+    && echo 'deb http://s3-eu-west-1.amazonaws.com/tideways/packages debian main' > /etc/apt/sources.list.d/tideways.list \
+    && curl -sL https://s3-eu-west-1.amazonaws.com/tideways/packages/EEB5E8F4.gpg | apt-key add - \
     && apt-get update \
     && apt-get install tideways-php tideways-daemon \
     && apt-get -y autoremove \
@@ -202,8 +202,8 @@ FROM nodejs as nodejs-tideways
 
 USER root
 RUN apt-get install -y gnupg2 \
-    && echo 'deb http://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages debian main' > /etc/apt/sources.list.d/tideways.list \
-    && curl -sL https://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages/EEB5E8F4.gpg | apt-key add - \
+    && echo 'deb http://s3-eu-west-1.amazonaws.com/tideways/packages debian main' > /etc/apt/sources.list.d/tideways.list \
+    && curl -sL https://s3-eu-west-1.amazonaws.com/tideways/packages/EEB5E8F4.gpg | apt-key add - \
     && apt-get update \
     && apt-get install tideways-php tideways-daemon \
     && apt-get -y autoremove \
