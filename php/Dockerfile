@@ -95,6 +95,15 @@ RUN env \
         extension=apc.so\n\
         " > $PHP_INI_DIR/conf.d/100-apc.ini; \
     fi \
+    && if [ -z "$APCU_VERSION" ] ; then \
+            echo "Don't installing apcu extension"; \
+        else \
+            printf "\n" | pecl install apcu-${APCU_VERSION} \
+            && printf "\
+            extension=apcu.so\n\
+            extension=apc.so\n\
+            " > $PHP_INI_DIR/conf.d/100-apc.ini; \
+        fi \
     && docker-php-source delete \
     && apt-get remove --purge -y libx11-6 $PHPIZE_DEPS \
     && apt-get autoremove -y \
