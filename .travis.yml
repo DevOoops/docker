@@ -40,6 +40,7 @@ before_install:
         sudo service docker restart
     fi
 install:
+  - echo "${DOCKER_HUB_PASSWORD}" | docker login --username="${DOCKER_HUB_USERNAME}" --password-stdin
   - "make -C ${IMAGE_NAME} pull"
 script:
   - "make -C ${IMAGE_NAME} build"
