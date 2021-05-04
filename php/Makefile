@@ -6,7 +6,7 @@ include ../Makefile
 MEMCACHED_VERSION?=3.1.5
 REDIS_VERSION?=5.3.2
 REDIS_NEXT_VERSION?=5.3.2
-COMPOSER_VERSION?=2.0.8
+COMPOSER_VERSION?=2.0.13
 
 build:
 	@docker build --quiet --rm \
@@ -18,7 +18,6 @@ build:
 		--build-arg REDIS_VERSION=$(REDIS_VERSION) \
 		--build-arg REDIS_NEXT_VERSION=$(REDIS_NEXT_VERSION) \
 		--build-arg COMPOSER_VERSION=$(COMPOSER_VERSION) \
-		--build-arg PRESTISSIMO_VERSION=$(PRESTISSIMO_VERSION) \
 		--target base \
 		-t $(DOCKER_IMAGE_NAME):$(TAG) .
 	@docker build --quiet --rm \
@@ -30,7 +29,6 @@ build:
 		--build-arg REDIS_VERSION=$(REDIS_VERSION) \
 		--build-arg REDIS_NEXT_VERSION=$(REDIS_NEXT_VERSION) \
 		--build-arg COMPOSER_VERSION=$(COMPOSER_VERSION) \
-		--build-arg PRESTISSIMO_VERSION=$(PRESTISSIMO_VERSION) \
 		--target nodejs \
 		-t $(DOCKER_IMAGE_NAME):$(TAG)-nodejs .
 	@docker build --quiet --rm \
@@ -42,7 +40,6 @@ build:
 		--build-arg REDIS_VERSION=$(REDIS_VERSION) \
 		--build-arg REDIS_NEXT_VERSION=$(REDIS_NEXT_VERSION) \
 		--build-arg COMPOSER_VERSION=$(COMPOSER_VERSION) \
-		--build-arg PRESTISSIMO_VERSION=$(PRESTISSIMO_VERSION) \
 		--target tideways \
 		-t $(DOCKER_IMAGE_NAME):$(TAG)-tideways .
 	@docker build --quiet --rm \
@@ -54,7 +51,6 @@ build:
 		--build-arg REDIS_VERSION=$(REDIS_VERSION) \
 		--build-arg REDIS_NEXT_VERSION=$(REDIS_NEXT_VERSION) \
 		--build-arg COMPOSER_VERSION=$(COMPOSER_VERSION) \
-		--build-arg PRESTISSIMO_VERSION=$(PRESTISSIMO_VERSION) \
 		--target nodejs-tideways \
 		-t $(DOCKER_IMAGE_NAME):$(TAG)-nodejs-tideways .
 
