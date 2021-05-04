@@ -161,13 +161,6 @@ RUN if [ -z "$COMPOSER_VERSION" ] ; then \
         && chown php:php /home/php/bin/composer; \
     fi
 
-ARG PRESTISSIMO_VERSION
-RUN if [ -z "$PRESTISSIMO_VERSION" ] || [ "$PRESTISSIMO_VERSION$COMPOSER_VERSION" == "$PRESTISSIMO_VERSION" ] ; then \
-        echo "Not installing prestissimo"; \
-    else \
-        composer global require hirak/prestissimo:$PRESTISSIMO_VERSION && composer global clear-cache -vvv; \
-    fi
-
 WORKDIR /home/php/app
 
 COPY entrypoint.sh /
