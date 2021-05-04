@@ -6,7 +6,7 @@ include ../Makefile
 MEMCACHED_VERSION?=3.1.5
 REDIS_VERSION?=5.3.2
 REDIS_NEXT_VERSION?=5.3.2
-COMPOSER_VERSION?=2.0.8
+COMPOSER_VERSION?=2.0.13
 
 build:
 	@docker build --quiet --rm \
